@@ -18,13 +18,19 @@ class Api::LicencesController < ApplicationController
       user: current_user
     ).call
 
+    current_user.licences.create! pdf_path: pdf_path 
+
     UserMailer.certification_received(
       user: current_user,
       pdf_path: pdf_path
     ).deliver
 
+
+
     head :created
   end
+
+
 
   private
 
