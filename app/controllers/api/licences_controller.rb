@@ -13,7 +13,15 @@ class Api::LicencesController < ApplicationController
       return head :unprocessable_entity
     end
 
-    GeneratePdf.new(csv_string: csv_string, user: current_user).call
+    pdf_path = GeneratePdf.new(
+      csv_string: csv_string,
+      user: current_user
+    ).call
+
+    UserMailer.certification_received(
+      user: current_user,
+      pdf_path: pdf_path
+    ).deliver
 
     head :created
   end

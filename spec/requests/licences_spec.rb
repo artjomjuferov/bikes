@@ -16,7 +16,9 @@ RSpec.describe 'Licences', type: :request do
     let(:filepath) { Rails.root.join('spec', 'fixtures', 'valid_licence.csv') }
 
     it "uploads csv and creates Licence" do
-      post "/api/licences", params: params, headers: headers
+      expect do
+        post "/api/licences", params: params, headers: headers
+      end.to change { UserMailer.deliveries.count }.by(1)
 
       expect(response).to have_http_status(:created)
     end
@@ -26,7 +28,9 @@ RSpec.describe 'Licences', type: :request do
     let(:filepath) { Rails.root.join('spec', 'fixtures', 'invalid_licence.csv') }
 
     it "does not create licence" do
-      post "/api/licences", params: params, headers: headers
+      expect do
+        post "/api/licences", params: params, headers: headers
+      end.to change { UserMailer.deliveries.count }.by(0)
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -38,7 +42,9 @@ RSpec.describe 'Licences', type: :request do
     end
 
     it "returns unauthorized error" do
-      post "/api/licences", params: params, headers: headers
+      expect do
+        post "/api/licences", params: params, headers: headers
+      end.to change { UserMailer.deliveries.count }.by(0)
 
       expect(response).to have_http_status(:unauthorized)
     end
