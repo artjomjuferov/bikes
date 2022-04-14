@@ -18,19 +18,22 @@ class Api::LicencesController < ApplicationController
       user: current_user
     ).call
 
-    current_user.licences.create! pdf_path: pdf_path 
+    current_user.licences.create! pdf_path: pdf_path
 
     UserMailer.certification_received(
       user: current_user,
       pdf_path: pdf_path
     ).deliver
 
-
-
     head :created
   end
 
+  def index
+    unless UserPolicy.new(current_user).download_license?
+      return head :unauthorized
+    end
 
+  end
 
   private
 

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Licences', type: :request do
+  let(:user) { User.create! email: 'john@doe.com' }
 
   describe 'POST #create' do
-    let(:user) { User.create! email: 'john@doe.com' }
     let(:file) { Rack::Test::UploadedFile.new(filepath, 'application/csv') }
 
     let(:params) do
@@ -51,6 +51,18 @@ RSpec.describe 'Licences', type: :request do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET #download' do
+    let(:params) do
+      { user_id: Base64.encode64(user.id.to_s) }
+    end
+
+    context 'when user does not have a licence' do
+
+      it "returns unauthorized error" do
+        get "/api/licences", params: params, headers: headers
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end
