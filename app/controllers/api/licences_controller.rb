@@ -6,6 +6,11 @@ class Api::LicencesController < ApplicationController
     unless UserPolicy.new(current_user).upload_csv?
       return head :unauthorized
     end
+
+    unless params[:file]
+      return head :unprocessable_entity
+    end
+
     csv_string = params[:file].read
 
     # could be used dry-validation instead
@@ -42,6 +47,7 @@ class Api::LicencesController < ApplicationController
 
   # In sake of saving time instead of using proper jwt
   def current_user
+    return unless params[:user_id]
     User.find_by(id: Base64.decode64(params[:user_id]))
   end
 end
