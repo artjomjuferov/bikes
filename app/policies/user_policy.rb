@@ -7,8 +7,7 @@ class UserPolicy
     not @user.nil?
   end
 
-  def download_license?
+  def download_licence?
     not @user.licences.empty?
   end
-
 end

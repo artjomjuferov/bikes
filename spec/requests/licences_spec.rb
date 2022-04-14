@@ -57,11 +57,23 @@ RSpec.describe 'Licences', type: :request do
     end
 
     context 'when user does not have a licence' do
-
       it "returns unauthorized error" do
         get "/api/licences", params: params, headers: headers
 
         expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'whith a licence' do
+      let(:pdf_path) { Rails.root.join('spec', 'fixtures', 'licence.pdf') }
+
+      let!(:licence) { user.licences.create! pdf_path: pdf_path}
+
+      it "return a file to download" do
+        get "/api/licences", params: params, headers: headers
+
+        expect(response).to have_http_status(:ok)
+        expect(response.header['Content-Disposition']).to eq("attachment")
       end
     end
   end

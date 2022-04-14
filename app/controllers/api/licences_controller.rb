@@ -29,10 +29,13 @@ class Api::LicencesController < ApplicationController
   end
 
   def index
-    unless UserPolicy.new(current_user).download_license?
+    unless UserPolicy.new(current_user).download_licence?
       return head :unauthorized
     end
 
+    licence = current_user.licences.last
+
+    send_data licence.pdf_path
   end
 
   private
