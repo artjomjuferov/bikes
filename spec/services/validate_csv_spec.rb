@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CsvValidator do
+RSpec.describe ValidateCsv do
   subject do
     described_class.new(csv_string: csv_string).call
   end

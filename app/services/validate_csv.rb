@@ -1,6 +1,7 @@
 require 'csv'
 
-class CsvValidator
+# More rules can applied here
+class ValidateCsv
   include Memery
 
   def initialize csv_string:
