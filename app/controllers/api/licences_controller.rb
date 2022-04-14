@@ -13,6 +13,7 @@ class Api::LicencesController < ApplicationController
   private
 
   def validate_csv
+    # could be used dry-validation instead
     ValidateCsv.new(csv_string: params[:file].read)
   end
 end
