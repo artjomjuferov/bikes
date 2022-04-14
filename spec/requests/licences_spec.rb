@@ -5,7 +5,7 @@ RSpec.describe 'Licences', type: :request do
     { "ACCEPT" => "application/json" }
   end
 
-  let(:user) { User.create! }
+  let(:user) { User.create! email: 'john@doe.com' }
   let(:file) { Rack::Test::UploadedFile.new(filepath, 'application/csv') }
 
   let(:params) do
